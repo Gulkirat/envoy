@@ -1,27 +1,50 @@
 package com.envoydigital.controllers;
 
+import com.envoydigital.service.CurrencyService;
 import com.envoydigital.service.ProductService;
-import com.sun.xml.internal.ws.util.StringUtils;
-import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 
 @Controller
+@RequestMapping("/product/list")
 public class ProductListController {
 
 	@Resource(name="productService")
 	private ProductService productService;
 
-	@RequestMapping("/product/list")
+	@Resource(name="currencyService")
+	private CurrencyService currencyService;
+
+	@RequestMapping(method = RequestMethod.GET)
 	public String getProductListPage(Model model, HttpSession session) {
-		model.addAttribute("products", productService.getProducts());
-		session.setAttribute("currency", "GBP");
+		setUpPage(model, session, null);
 		return "productList";
+	}
+
+	@RequestMapping(path = "/currency", method = RequestMethod.POST)
+	public String setCurrency(Model model, HttpSession session, @RequestParam(name="currency") String currency) {
+		setUpPage(model, session, currency);
+		return "productList";
+	}
+
+	private void setUpPage(Model model, HttpSession session, String currency) {
+		model.addAttribute("products", productService.getProducts());
+		model.addAttribute("currencies", currencyService.getCurrencies());
+		setSessionCurrency(session, currency);
+	}
+
+	private void setSessionCurrency(HttpSession session, String currency) {
+		if (currency == null) {
+			session.setAttribute("currency", "GBP");
+		} else {
+			session.setAttribute("currency", currency);
+		}
 	}
 
 }
