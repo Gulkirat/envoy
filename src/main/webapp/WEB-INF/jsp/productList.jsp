@@ -8,7 +8,7 @@
 
 <c:set var="selectedCurrency" value="${sessionScope.currency}"/>
 
-<form action="/product/list/currency" method="post">
+<form method="post">
 	<select id="currency" name="currency" onchange="this.form.submit()">
 		<c:forEach var="currency" items="${currencies}">
 			<c:choose>
@@ -29,7 +29,9 @@
 			<td>${product.name}</td>
 			<c:forEach var="item" items="${product.prices}">
 				<c:set var="price" value="${item.value}" />
-				<td>${price.currency} ${price.amount}</td>
+				<c:if test="${price.currency == selectedCurrency}">
+					<td>${price.currency.symbol}${price.amount}</td>
+				</c:if>
 			</c:forEach>
 		</tr>
 	</table>

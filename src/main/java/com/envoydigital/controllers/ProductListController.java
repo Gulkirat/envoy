@@ -27,7 +27,7 @@ public class ProductListController {
 		return "productList";
 	}
 
-	@RequestMapping(path = "/currency", method = RequestMethod.POST)
+	@RequestMapping(method = RequestMethod.POST)
 	public String setCurrency(Model model, HttpSession session, @RequestParam(name="currency") String currency) {
 		setUpPage(model, session, currency);
 		return "productList";
