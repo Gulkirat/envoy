@@ -1,16 +1,13 @@
 package com.envoydigital.controllers;
 
-import com.envoydigital.service.CurrencyService;
+import com.envoydigital.form.ProductForm;
+import com.envoydigital.model.Product;
 import com.envoydigital.service.ProductService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/product/edit/{id}")
@@ -24,6 +21,15 @@ public class ProductController {
 	@RequestMapping(method = RequestMethod.GET)
 	public String getProductEditPage(Model model, @PathVariable(name="id") Long productId) {
 		setUpPage(model, productId);
+		return "productEdit";
+	}
+	@RequestMapping(method = RequestMethod.POST)
+	public String saveProductChanges(Model model, ProductForm form) {
+		Product product = new Product();
+		product.setDescription(form.getDescription());
+		product.setId(form.getId());
+//		productService.save(product);
+		setUpPage(model, product.getId());
 		return "productEdit";
 	}
 

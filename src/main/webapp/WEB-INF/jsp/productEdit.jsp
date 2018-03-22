@@ -12,13 +12,13 @@
 		<table>
 			<tr>
 				<td>Name: </td>
-				<td><input type="text" value="${product.name}" /></td>
+				<td><input type="text" name="description" value="${product.name}" /></td>
 			</tr>
 				<c:forEach var="item" items="${product.prices}">
 					<c:set var="price" value="${item.value}" />
 					<tr>
 						<td>Price in ${price.currency.currencyCode} (${price.currency.symbol})</td>
-						<td><input type="text" value="${price.amount}"/></td>
+						<td><input type="text" name="${price.currency.currencyCode}" value="${price.amount}"/></td>
 					</tr>
 				</c:forEach>
 		</table>
