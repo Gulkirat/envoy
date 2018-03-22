@@ -47,7 +47,7 @@ public class ProductListController {
 	private void setSessionCurrency(HttpSession session, String currency) {
 		if (currency == null && session.getAttribute(CURRENCY) == null) {
 			session.setAttribute(CURRENCY, GBP);
-		} else {
+		} else if (currency != null){
 			session.setAttribute(CURRENCY, currency);
 		}
 	}
