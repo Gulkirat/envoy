@@ -34,6 +34,7 @@
 					<td>${price.currency.symbol}${price.amount}</td>
 				</c:if>
 			</c:forEach>
+			<td><a href="/product/edit/${product.id}">Edit</a></td>
 		</tr>
 	</table>
 </c:forEach>
