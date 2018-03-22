@@ -41,12 +41,15 @@ public class ProductListController {
 
 	private void setSessionCurrency(HttpSession session, String currency) {
 		if (currency == null) {
-			String sessionCurrency = String.valueOf(session.getAttribute("currency"));
-			String currencyToSet = sessionCurrency == null ? "GBP" : sessionCurrency;
-			session.setAttribute("currency", currencyToSet);
+			session.setAttribute("currency", getCurrencyToSet(session));
 		} else {
 			session.setAttribute("currency", currency);
 		}
+	}
+
+	private String getCurrencyToSet(HttpSession session) {
+		Object sessionCurrency = session.getAttribute("currency");
+		return sessionCurrency == null ? "GBP" : String.valueOf(sessionCurrency);
 	}
 
 }
