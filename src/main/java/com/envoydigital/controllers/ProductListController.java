@@ -15,6 +15,11 @@ import javax.servlet.http.HttpSession;
 @RequestMapping("/product/list")
 public class ProductListController {
 
+	private static final String CURRENCY = "currency";
+	private static final String GBP = "GBP";
+	private static final String PRODUCTS = "products";
+	private static final String CURRENCIES = "currencies";
+
 	@Resource(name="productService")
 	private ProductService productService;
 
@@ -28,28 +33,23 @@ public class ProductListController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public String setCurrency(Model model, HttpSession session, @RequestParam(name="currency") String currency) {
+	public String setCurrency(Model model, HttpSession session, @RequestParam(name=CURRENCY) String currency) {
 		setUpPage(model, session, currency);
 		return "productList";
 	}
 
 	private void setUpPage(Model model, HttpSession session, String currency) {
-		model.addAttribute("products", productService.getProducts());
-		model.addAttribute("currencies", currencyService.getCurrencies());
+		model.addAttribute(PRODUCTS, productService.getProducts());
+		model.addAttribute(CURRENCIES, currencyService.getCurrencies());
 		setSessionCurrency(session, currency);
 	}
 
 	private void setSessionCurrency(HttpSession session, String currency) {
-		if (currency == null) {
-			session.setAttribute("currency", getCurrencyToSet(session));
+		if (currency == null && session.getAttribute(CURRENCY) == null) {
+			session.setAttribute(CURRENCY, GBP);
 		} else {
-			session.setAttribute("currency", currency);
+			session.setAttribute(CURRENCY, currency);
 		}
-	}
-
-	private String getCurrencyToSet(HttpSession session) {
-		Object sessionCurrency = session.getAttribute("currency");
-		return sessionCurrency == null ? "GBP" : String.valueOf(sessionCurrency);
 	}
 
 }
