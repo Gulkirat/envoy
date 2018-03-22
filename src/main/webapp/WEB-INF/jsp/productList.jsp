@@ -9,6 +9,7 @@
 <c:set var="selectedCurrency" value="${sessionScope.currency}"/>
 
 <form method="post">
+	<label for="currency">Select your currency: </label>
 	<select id="currency" name="currency" onchange="this.form.submit()">
 		<c:forEach var="currency" items="${currencies}">
 			<c:choose>
