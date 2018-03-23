@@ -1,65 +1,47 @@
 package com.envoydigital.controllers;
 
 import com.envoydigital.form.ProductForm;
-import com.envoydigital.model.Price;
 import com.envoydigital.model.Product;
+import com.envoydigital.populator.ProductPopulator;
 import com.envoydigital.service.ProductService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.annotation.Resource;
-import java.math.BigDecimal;
-import java.util.Currency;
-import java.util.HashMap;
-import java.util.Map;
 
 @Controller
 @RequestMapping("/product/edit/{id}")
 public class ProductController {
 
-	private static final String PRODUCT = "product";
+    private static final String PRODUCT = "product";
 
-	@Resource(name="productService")
-	private ProductService productService;
+    @Resource(name = "productService")
+    private ProductService productService;
 
-	@RequestMapping(method = RequestMethod.GET)
-	public String getProductEditPage(Model model, @PathVariable(name="id") Long productId) {
-		setUpPage(model, productId);
-		return "productEdit";
-	}
-	@RequestMapping(method = RequestMethod.POST)
-	public String saveProductChanges(Model model, ProductForm productForm) {
-		Product product = getProductFrom(productForm);
+    @Resource(name = "productPopulator")
+    private ProductPopulator productPopulator;
 
-		productService.save(product);
-		setUpPage(model, product.getId());
-		return "productEdit";
-	}
+    @RequestMapping(method = RequestMethod.GET)
+    public String getProductEditPage(Model model, @PathVariable(name = "id") Long productId) {
+        setUpPage(model, productId);
+        return "productEdit";
+    }
 
-	private Product getProductFrom(ProductForm form) {
-		Product product = productService.getProductForId(form.getId());
-		product.setName(form.getName());
-		product.setDescription(form.getDescription());
-		product.setPrices(getPrices(form, product.getPrices()));
-		return product;
-	}
+    @RequestMapping(method = RequestMethod.POST)
+    public String saveProductChanges(Model model, ProductForm productForm) {
+        Product product = productService.getProductForId(productForm.getId());
+        product = productPopulator.populate(productForm, product);
 
-	private Map<Currency, Price> getPrices(ProductForm form, Map<Currency, Price> prices) {
-		setPrice(prices, "GBP", form.getGBP());
-		setPrice(prices, "EUR", form.getEUR());
-		return prices;
-	}
+        productService.save(product);
+        setUpPage(model, product.getId());
+        return "productEdit";
+    }
 
-	private void setPrice(Map<Currency, Price> prices, String currencyCode, BigDecimal amount) {
-		Currency currency = Currency.getInstance(currencyCode);
-		Price price = prices.get(currency);
-		price.setAmount(amount);
-		prices.put(currency, price);
-	}
-
-	private void setUpPage(Model model, Long productId) {
-		model.addAttribute(PRODUCT, productService.getProductForId(productId));
-	}
+    private void setUpPage(Model model, Long productId) {
+        model.addAttribute(PRODUCT, productService.getProductForId(productId));
+    }
 
 }
