@@ -12,7 +12,11 @@
 		<table>
 			<tr>
 				<td>Name: </td>
-				<td><input type="text" name="description" value="${product.name}" /></td>
+				<td><input type="text" name="name" value="${product.name}" /></td>
+			</tr>
+			<tr>
+				<td>Description: </td>
+				<td><input type="text" name="description" value="${product.description}" /></td>
 			</tr>
 				<c:forEach var="item" items="${product.prices}">
 					<c:set var="price" value="${item.value}" />

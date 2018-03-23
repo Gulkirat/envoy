@@ -1,19 +1,30 @@
 package com.envoydigital.form;
 
+import java.math.BigDecimal;
+
 public class ProductForm {
 
 	private Long id;
-	private String description;
-	private String gbp;
-	private String eur;
+    private String name;
+    private String description;
+    private BigDecimal gbp;
+    private BigDecimal eur;
 
-	public Long getId() {
+    public Long getId() {
 		return id;
 	}
 
 	public void setId(Long id) {
 		this.id = id;
 	}
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public String getDescription() {
         return description;
@@ -23,19 +34,19 @@ public class ProductForm {
         this.description = description;
     }
 
-	public String getGBP() {
+	public BigDecimal getGBP() {
 		return gbp;
 	}
 
-	public void setGBP(String gbp) {
+	public void setGBP(BigDecimal gbp) {
 		this.gbp = gbp;
 	}
 
-	public String getEUR() {
+	public BigDecimal getEUR() {
 		return eur;
 	}
 
-	public void setEUR(String eur) {
+	public void setEUR(BigDecimal eur) {
 		this.eur = eur;
 	}
 
